@@ -22,7 +22,7 @@ app.use("/api/auth",require("./routes/auth"));
 app.use("/api/feedback",require("./routes/feedback"));
 app.use("/api/cart",require("./routes/cart"));
 app.use("/api/dashboard",require("./routes/dashboard"));
-// app.use("/api/pic",require("./routes/pic"));
+app.use("/api/pic",require("./routes/pic"));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
