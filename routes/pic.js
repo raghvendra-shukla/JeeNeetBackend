@@ -12,7 +12,7 @@ const upload=multer({
         // cb is for callback you also write any other thing
         destination:(req,file,cb)=>{
             //uploads is the folder name
-            cb(null,"uploads");
+            cb(null,path.join(__dirname, '/uploads/'));
         },
         filename:(req,file,cb)=>{
             // jpg is for image you use any extension
@@ -26,17 +26,27 @@ const upload=multer({
 // Route1: getImage using get request
 router.get('/fetchImage',middleware, async(req, res) => {
     try {
-      const img=await Image.findOne({user:req.user.id});
+      const img=await Image.findOne({user:req.user.id},).limit(1).sort({$natural:-1});
       //  Replace the buffer array with base64 data
-      // const imgBase64 = img.image.data.toString("base64");
-      // img.image.data = imgBase64;
+      const imgBase64 = img.image.data.toString("base64");
+      img.image.data = imgBase64;
       // console.log(imgBase64);
-      res.json(img.image.data);
+      // res.contentType('json');
+      // res.send(img.image);
+    // for the ease just send the base 64 encoded string
+      res.send(imgBase64);
       // res.json(img.image);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server error occured");
     }
+  //   Image.findOne({user:req.user.id}, 'img createdAt', function(err, img) {
+  //     if (err)
+  //         res.send(err);
+  //     console.log(img);
+  //     res.contentType('json');
+  //     res.send(img);
+  // }).sort({ createdAt: 'desc' });
   });
 
 // creating a route for uploading 
@@ -61,7 +71,8 @@ router.post("/addImage",[
                     image:{
                         // data:req.file.filename,
                         // data:req.body.filename,
-                        data:fs.readFileSync(path.join("C:\\Users\\hp\\OneDrive\\Desktop\\JEE NEET Project\\jee-neet-project\\" + '/uploads/' + req.file.filename)),
+                        // data:fs.readFileSync(path.join("C:\\Users\\hp\\OneDrive\\Desktop\\JEE NEET Project\\jee-neet-project\\" + '/uploads/' + req.body.filename)),
+                        data:fs.readFileSync(req.file.path),
                         contentType:"image/jpg"
                     },
                     user:req.user.id
