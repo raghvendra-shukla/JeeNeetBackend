@@ -28,6 +28,7 @@ router.get('/fetchImage',middleware, async(req, res) => {
     try {
       const img=await Image.findOne({user:req.user.id},).limit(1).sort({$natural:-1});
       //  Replace the buffer array with base64 data
+      // console.log(img.image);
       const imgBase64 = img.image.data.toString("base64");
       img.image.data = imgBase64;
       // console.log(imgBase64);
@@ -37,8 +38,9 @@ router.get('/fetchImage',middleware, async(req, res) => {
       res.send(imgBase64);
       // res.json(img.image);
     } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Internal server error occured");
+      res.send("Not Found");
+      // console.error(error.message);
+      // res.status(500).send("Internal server error occured");
     }
   //   Image.findOne({user:req.user.id}, 'img createdAt', function(err, img) {
   //     if (err)

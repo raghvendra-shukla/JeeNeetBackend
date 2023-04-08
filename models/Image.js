@@ -12,7 +12,8 @@ const ImageSchema = new Schema({
     },
     image:{
         data:Buffer,
-        contentType:String
+        contentType:String,
+        // default:''
     },
     date:{
         type:Date,
