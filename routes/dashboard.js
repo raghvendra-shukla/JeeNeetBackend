@@ -8,11 +8,12 @@ const middleware = require("../middelware/middleware");
 // Route1: fetchingAprofile using get request
 router.get('/fetchInfo',middleware, async(req, res) => {
   try {
-    const info=await Dashboard.find({user:req.user.id});
+    const info=await Dashboard.findOne({user:req.user.id}).limit(1).sort({$natural:-1});
     res.json(info);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Internal server error occured");
+    // res.status(500).send("Internal server error occured");
+    res.send(null);
   }
 });
 
